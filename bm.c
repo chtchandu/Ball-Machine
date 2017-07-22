@@ -398,7 +398,7 @@ void display1()
 	glFlush();
 }
 
-//mouse function
+//keyboard function
 void keys(unsigned char key,int x,int y)
 {
   display();
