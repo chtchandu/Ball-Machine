@@ -1,0 +1,30 @@
+SIMULATION OF BALL MACHINE
+
+Introduction
+
+ball machine is used in cricket practicing in absence of bowler.
+
+normally ball machine has fast, slow and bounce option.
+
+we made a future generation ball machine it includes changing sides, swing and spin variations.
+
+Function used-
+
+1) mainly transformation function are used - like translate, rotate.
+
+2) for shapes - primitive, attribute and input functions are used.
+
+3) for printing - glutbitmap character is used.
+
+4) keyboard functions and menus are also used.
+
+Feautures -
+
+1) use keys to assign variation.
+
+2) change sides using menus.
+
+3) if ball hits the wicket bails comes off.
+
+4) proper seam movement fo variations.
+
