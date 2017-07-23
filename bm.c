@@ -3,13 +3,15 @@
 #include<string.h>
 #include<stdlib.h>
 #include<unistd.h>
+#include<time.h>
 
 GLfloat yRotationAngle=0.7,xRotationAngle=0.4,zRotationAngle=0.3;
 GLfloat xl=-0.7,xloc=0,yloc=-0.8,zloc=-0.1,xl1=-0.72,xl2=0.72,yl1=-0.67,yl2=-0.83;
 GLfloat xb1=0,yb1=0,zb1=0;
 GLfloat xb2=0,yb2=0,zb2=0;
 GLint val;
-
+char array[10],array1[10];
+int diff;
 void display1();
 
 //printing text
@@ -26,6 +28,21 @@ void print(float x, float y,float z, char *st)
 	}
 }
 
+void speed()
+{
+	time_t t;
+	srand((unsigned)time(&t));
+	float r = rand()%20;
+	int speed = 130 + r;
+	
+	sprintf(array,"%d",speed);
+	int count = 0;
+	
+	int speed1 = 80 + r;
+	sprintf(array1,"%d",speed1);
+	
+	//printf("%f\n",speed);
+}
 void print1(float x, float y,float z, char *st)
 {
 	int l,i;
@@ -223,12 +240,39 @@ void ballmach()
     glVertex3f(+0.6,-0.95,-0.3);
     glVertex3f(+0.6,-0.85,-0.3);
   glEnd();
+  
+  
 }
 
 void writ()
 {
-	glColor3f(0,0,0);
-	print1(xloc,yloc,zloc,"hello");
+	glColor3f(1,1,1);
+	print1(0.3,0.5,-0.3,"Right click mouse button to choose sides");
+	print1(0.3,0.4,-0.3,"Press i key to see instruction again");
+	glColor3f(1,0,0);
+	print1(-0.7,0.53,0,"FULL");
+	glColor3f(0,1,0);
+	print1(-0.8,0.33,0,"GOOD");
+	glColor3f(0,0,1);
+	print1(-0.9,0.05,0,"SHORT");
+	glColor3f(1,0,0);
+  	//print1(-0.2,0.8,-0.7,"BALL MACHINE");
+}
+
+void dim()
+{
+	glLineWidth(2.0);
+	glColor3f(1,0,0);
+	glBegin(GL_LINES);
+	glVertex3f(-0.85,-0.3,0);
+	glVertex3f(-0.65,0.2,0);
+	glColor3f(0,1,0);
+	glVertex3f(-0.65,0.2,0);
+	glVertex3f(-0.55,0.45,0);
+	glColor3f(0,0,1);
+	glVertex3f(-0.55,0.45,0);
+	glVertex3f(-0.478,0.60,0);
+	glEnd();
 }
 
 
@@ -236,12 +280,31 @@ void display()
 {
   glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
   glLoadIdentity();
+  //speed();
+  if(yloc > 0.8 && diff==0)
+  {
+  	glColor3f(0,1,0);
+  	print(0.7,0.7,0,array);
+  }
+  if(yloc > 0.8 && diff ==1)
+  {
+  	glColor3f(0,1,0);
+  	print(0.7,0.7,0,array1);
+  }
+  glBegin(GL_LINE_LOOP);
+  glVertex3f(0.64,0.65,0);
+  glVertex3f(0.64,0.78,0);
+  glVertex3f(0.86,0.78,0);
+  glVertex3f(0.86,0.65,0);
+  glEnd();
+  print1(0.65,0.83,0,"SPEED (kmph)");
   pitch();
   wickets();
   wickets2();
+  dim();
   ballmach();
   sphere();
-  //writ();
+  writ();
   glFlush();
 }
 
@@ -331,20 +394,21 @@ void display1()
 	glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
 	glLoadIdentity();
 	glColor3f(1,0,0);
-	
 	print(-0.2,0.2,-0.2,"press x for ball to FLASHY outswing");
 	//sleep(3);
+	glColor3f(0,1,0);
 	print(-0.3,0.1,-0.3,"press y for ball to BANANA inswing ");
+	
 	glColor3f(0,0,1);
 	print(-0.4,0,-0.4,"press z for TOE-CRUSHER yorker");
+	
 	glColor3f(1,0,0);
-	
 	print(-0.5,-0.1,-0.5,"press b for JAW-BREAKING bouncer");
+	
 	glColor3f(0,1,0);
-	
 	print(-0.6,-0.2,-0.6,"press o for SNAKY offbreak");
-	glColor3f(0,0,1);
 	
+	glColor3f(0,0,1);
 	print(-0.7,-0.3,-0.7,"press l for WARNY legbreak");
 	
     //print1(-0.8,-0.4,0,"chandresh tiwari");
@@ -398,14 +462,20 @@ void display1()
 	glFlush();
 }
 
-//keyboard function
+//mouse function
 void keys(unsigned char key,int x,int y)
 {
   display();
+  if(key == 'i'|| key == 'I')
+  {
+  		glutDisplayFunc(display1);
+  		glutIdleFunc(display1);
+  }
   //outswinger
   if(key == 'x' || key == 'X')
   {
     //round
+    diff=0;
     if(val==2)
     {
         //print(xloc,yloc,zloc,"hello");
@@ -438,6 +508,7 @@ void keys(unsigned char key,int x,int y)
 				yb2=-0.1;
 				zb2=0.1;
 			}
+			
     }
     //over
     if(val==1)
@@ -478,6 +549,7 @@ void keys(unsigned char key,int x,int y)
   //inswinger
   if(key == 'y' || key == 'Y')
   {
+  	diff=0;
     if(val==2)
     {
           if(yloc<0.40 && zloc>-1.05)
@@ -549,6 +621,7 @@ void keys(unsigned char key,int x,int y)
 //yorker
 if(key == 'z' || key == 'Z')
   {
+  	diff =0;
     if(val==2)
     {
        if(yloc<0.60 && zloc>-1.072)
@@ -616,6 +689,7 @@ if(key == 'z' || key == 'Z')
   //bouncer
   if(key == 'b'|| key == 'B')
   {
+  	diff = 0;
     if(val==2)
     {
         if(yloc<0.40 && zloc>-1.05)
@@ -624,10 +698,10 @@ if(key == 'z' || key == 'Z')
             zloc-=0.004;
             xloc-=0.015;
         }
-        else if(yloc < 0.42 && zloc > -1.065)
+        else if(yloc < 0.45 && zloc > -1.067)
         {
-        	yloc-=0.010;
-        	zloc-=0.002;
+        	yloc-=0.016;
+        	zloc-=0.0018;
         	xloc-=0.010;
         }
         else
@@ -646,10 +720,10 @@ if(key == 'z' || key == 'Z')
             zloc-=0.004;
             xloc+=0.015;
         }
-        else if(yloc < 0.42 && zloc > -1.065)
+        else if(yloc < 0.45 && zloc > -1.067)
         {
-        	yloc-=0.010;
-        	zloc-=0.002;
+        	yloc-=0.016;
+        	zloc-=0.0018;
         	xloc+=0.010;
         }
         else
@@ -664,6 +738,7 @@ if(key == 'z' || key == 'Z')
   //offbreak
   if(key == 'o'|| key == 'O')
   {
+  	diff = 1;
     if(val==2)
     {
       if(yloc<0.80 && zloc>-1.05)
@@ -733,6 +808,7 @@ if(key == 'z' || key == 'Z')
   //legbreak
   if(key == 'l'|| key == 'L')
   {
+  	diff = 1;
     if(val==2)
     {
       if(yloc<0.80 && zloc>-1.05)
@@ -846,10 +922,12 @@ void myreshape(int w,int h)
 
 int main(int argc, char **argv)
 {
-	glutInit(&argc, argv); // Initialize GLUT
+	glutInit(&argc, argv);
+	//speed(); // Initialize GLUT
 	glutInitDisplayMode(GLUT_SINGLE|GLUT_RGB|GLUT_DEPTH);
 	glutInitWindowSize(750, 750);
 	glutInitWindowPosition(0, 0);
+	speed();
 	glutCreateWindow("Ball Machine");
   glutCreateMenu(menu);
   glutAddMenuEntry("over the wicket",1);
